@@ -1,0 +1,6 @@
+
+
+This application enables the exploration of that question through spatial interpolation and statistical analysis. The given data include nitrate levels sampled from drinking water wells across Wisconsin and cancer rates aggregated by census tract. 
+
+
+We begin with inverse distance weighted interpolation - utilize the dropdown menu for contextual information on interpolation and OLS linear regression, then choose a K-value and run the analysis!
