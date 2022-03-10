@@ -1,11 +1,13 @@
 ''' This file contains functions which will access the required geoprocessing
 tools. The steps are:
  - Prepare folder for first run if needed
- - Interpolate nitrate levels from sample wells via IDW
+ - Interpolate nitrate levels from well points via IDW
  - Summarize results of IDW interpolation at tract level
  - Update nitrates field in tracts shapefile
  - Run OLS linear regression
  - Run Moran's I spatial autocorrelation on OLS results
+ - Update map layer connection properties and layouts
+ - Export updated maps
  '''
 
 import arcpy
@@ -109,7 +111,6 @@ def run_moransI(k):
     report = mI.getOutput(3)
     return report
 
-
 def update_data_source(layer, k):
     newCP = layer.connectionProperties
     newSource = f'{str(k).replace(".","_")}.tif'
@@ -145,36 +146,3 @@ def generate_maps(k):
     OLSLayout.exportToPNG(r'reports/OLS_{}.png'.format(str(k).replace(".","_")), 200)
 
     aprx.save()
-
-
-# def generate_maps(k):
-#     #projectPath = r'CancerNitrates.aprx'
-
-#     aprx = arcpy.mp.ArcGISProject(r'C:\Geog777\Project1\CancerNitrates.aprx')
-
-#     # update IDW raster in map
-#     IDWMap = aprx.listMaps('Map')[0]
-#     IDWLayer = IDWMap.listLayers('Idw*')[0]
-#     update_data_source(IDWLayer, k)
-
-#     #update K label in layout
-#     IDWLayout = aprx.listLayouts('IDW*')[0]
-#     lblK = IDWLayout.listElements('TEXT_ELEMENT', '*')[1]
-#     lblK.text = f'K = {k}'
-
-#     #export IDW map
-#     IDWLayout.exportToPNG(r'reports/IDW_{}.png'.format(str(k).replace(".","_")), 150)
-
-#     #update OLS in map
-#     OLSMap = aprx.listMaps('OLS_Map')[0]
-#     OLSLayer = OLSMap.listLayers('OLS*')[0]
-#     # OLSLayer = OLSMap.listLayers('*')[0]
-#     update_data_source(OLSLayer, k)
-
-#     #export OLS map
-#     olsLayout = aprx.listLayouts('OLS_Layout')[0]
-#     olsK = olsLayout.listElements('TEXT_ELEMENT', '*')[1]
-#     olsK.text = f'K = {k}'
-#     olsLayout.exportToPNG(r'reports/OLS_{}.png'.format(str(k).replace(".","_")), 150)
-
-#     aprx.save()
